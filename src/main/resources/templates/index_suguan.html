@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<link rel="stylesheet" href="../layui/css/layui.css">
+<link rel="stylesheet" href="../layui/css/my.css">
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">宿舍管理系统</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <img th:src="@{/images/icon.png}" src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    <span id="name">贤心</span>
+                </a>
+            </li>
+            <li class="layui-nav-item"><a onclick="logout()">退了</a></li>
+        </ul>
+    </div>
+</div>
+<div>
+    <div class="layui-side" >
+        <ul class="layui-nav layui-nav-tree" lay-filter="">
+            <li class="layui-nav-item layui-this"><a href="../suguan/student.html" target="content">学生管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/menu.html" target="content">菜单管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/role.html" target="content">角色管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/building" target="content">宿舍楼管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/dormitory.html" target="content">宿舍管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/visitor.html" target="content">访客记录管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/repair.html" target="content">报修管理</a></li>
+            <li class="layui-nav-item"><a href="../suguan/energy.html" target="content">水电气费管理</a></li>
+        </ul>
+
+    </div>
+    <div>
+        <iframe th:src="@{/suguan/student.html}"  id="content" name="content" scrolling="no" frameborder="0" width="100%"></iframe>
+    </div>
+
+</div>
+
+</body>
+<script src="../layui/layui.js"></script>
+<script>
+    name=localStorage.getItem("name")
+    document.getElementById("name").innerHTML=name;
+
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+
+    window.onresize=function(){
+    }
+
+    function logout(){
+        localStorage.removeItem("name")
+        window.location.href="/"
+    }
+
+</script>
+</html>

@@ -1,0 +1,47 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://47.107.71.52:3306/dormitory?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    driverclassname: com.mysql.cj.jdbc.Driver
+  aop:
+    proxy-target-class: true
+#    db-name: guns #用来搜集数据库的所有表
+#    filters: wall,mergeStat
+# TODO xml文件放在mapper/mapping文件夹下，无法映射
+#mybatis-plus:
+#  mapper-locations: classpath*:com/zxhan/mapper/mapping/*.xml
+
+# 代码生成器
+code:
+  dirPath: C:\Users\xlwang\Desktop\road-yao\src\main\java # 生成需要改此路径
+  author: zxhan
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://47.107.71.52:3306/dormitory?useUnicode=true&useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+  username: root
+  password: 123456
+  includetable: dept #多个逗号隔开
+  parentpackage: com.zxhanmodular # 生成需要改此路径
+  openLombok: true
+
+#多环境配置
+---
+server:
+  port: 8083
+spring:
+  profiles: prod
+#  profiles:
+#    active: prod
+---
+server:
+  port: 8083
+spring:
+  profiles:
+    active: dev
+#  mvc:
+#    static-path-pattern: /static/**
+#    view:
+#      prefix: /WEB-INF/view/
+#  profiles: dev
+

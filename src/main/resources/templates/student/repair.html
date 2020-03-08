@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+<div style="width: 83%">
+    <div class="layui-form-item layui-form">
+        <div class="layui-inline">
+            <input id="roomId" class="layui-input" type="text" placeholder="寝室号">
+        </div>
+        <div class="layui-inline">
+            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon"></i>搜索</button>
+            <button id="btnAdd" class="layui-btn icon-btn" onclick="add()"><i class="layui-icon"></i>添加</button>
+            <!--<button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon"></i>导出</button>-->
+        </div>
+    </div>
+    <table id="demo" lay-filter="test"></table>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 600
+            ,url: '/repair' //数据接口
+            ,page: true //开启分页
+            ,cols: [
+                [ //表头
+                {field: 'id', title: 'ID',  sort: true, fixed: 'left'}
+                ,{field: 'roomId', title: '寝室号',  sort: true}
+                ,{field: 'repairDevice', title: '报修设备'}
+                ,{field: 'des', title: '说明'}
+                ,{field: 'status', title: '进度'}
+            ]
+            ]
+        });
+        //查找
+        var $ = layui.$, active = {
+            reload:function(){
+                table.reload('demo',
+                    {page:
+                        {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: { roomId: $("#roomId").val()}//这里传参  向后台
+                        , url: '/repair'//后台做模糊搜索接口路径
+                        , method: 'post'
+                    });
+            }
+        };
+        $('#btnSearch').on('click', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    //跳转到添加页面
+    function add() {
+        layer.open({
+            type: 2,
+            title:"新建保修",
+            content: '/student/repair/add', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            area:['700px','300px']
+        });
+    }
+</script>
+</body>
+</html>

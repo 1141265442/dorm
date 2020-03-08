@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhan.modular.mapper.DeptMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zxhan.modular.entity.Dept">
+        <id column="id" property="id" />
+        <result column="num" property="num" />
+        <result column="pid" property="pid" />
+        <result column="pids" property="pids" />
+        <result column="name" property="name" />
+        <result column="tips" property="tips" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, num, pid, pids, name, tips
+    </sql>
+<!--where deptid=26-->
+    <select id="selectDorm" resultType="map">
+        select dept.*,students,buiding.name buildingName from dept
+            left join (
+                    select CONCAT('[',GROUP_CONCAT(CONCAT("'",name,"'")),']') students,deptid from user
+                        where roleid=1  group by deptid
+                    )a on dept.id=a.deptid
+            left join dept buiding on dept.pids=buiding.id  where dept.pids!='0'
+            <if test="condition != null" >
+                and dept.name like CONCAT('%',#{condition},'%')
+            </if>
+    </select>
+
+    <update id="cancel">
+        UPDATE user  set deptid=null WHERE id=#{id}
+    </update>
+
+</mapper>

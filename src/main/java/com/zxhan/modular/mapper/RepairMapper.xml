@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zxhan.modular.mapper.RepairMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.zxhan.modular.entity.Repair">
+        <id column="id" property="id" />
+        <result column="room_id" property="roomId" />
+        <result column="repair_device" property="repairDevice" />
+        <result column="des" property="des" />
+        <result column="status" property="status" />
+        <result column="response" property="response" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, room_id, repair_device, des, status, response
+    </sql>
+
+</mapper>

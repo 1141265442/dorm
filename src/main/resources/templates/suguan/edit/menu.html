@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+    <div class="layui-container" style="position: absolute;top: 10%;">
+        <div class="layui-row">
+            <form class="layui-form" action="" >
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="code" disabled="disabled" id="code" required lay-verify="required" th:value="${menu.code}" autocomplete="off" class="layui-input">
+                    </div>
+                    <input type="text" name="id" id="id" hidden="hidden" required lay-verify="required" th:value="${menu.id}">
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="code" disabled="disabled" id="name" required lay-verify="required" th:value="${menu.name}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="tips" id="tips" required lay-verify="required" th:value="${menu.tips}" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            </form>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="submit()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<script th:src="@{/layui/layui.js}"></script>
+<script th:src="@{/js/jquery-1.9.0.min.js}"></script>
+<script>
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer;
+    });
+
+    function submit() {
+        var jsonObj = {"name":$('#name').val(),"tips":$('#tips').val(),"id":$('#id').val(),"pids":"0"};
+        console.log(jsonObj)
+        $.ajax({
+            type: 'POST',
+            url: "/suguan/menuList/edit",
+            dataType: "json",
+            data:jsonObj,
+            success: function(data) {
+                layer.msg(data.message,{icon:1})
+                setTimeout(function(){ parent.location.reload();},1000);
+            },
+            error: function() {
+                layer.msg("操作失败")
+            }
+        });
+    }
+</script>
+</body>
+</html>

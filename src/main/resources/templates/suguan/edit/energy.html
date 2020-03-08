@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+    <div class="layui-container" style="position: absolute;top: 10%;">
+        <div class="layui-row">
+            <form class="layui-form">
+            <div class="layui-col-xs6">
+                <input type="text" id="id" th:value="${map.id}" required lay-verify="required" hidden="hidden">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">寝室号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="roomId" th:value="${map.roomId}" name="roomId" required lay-verify="required" placeholder="寝室号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">能源类型</label>
+                    <div class="layui-input-inline">
+                        <select name="user" id="energyType" class="layui-option">
+                            <option value="水费">水</option>
+                <option value="电费">电</option>
+                            <option value="燃气费">气</option>
+                </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用量</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="mount" th:value="${map.mount}" name="mount" required lay-verify="required" placeholder="输入用量" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">缴费金额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" th:value="${map.payMoney}" id="payMoney" name="payMoney" placeholder="输入缴费金额">
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" onclick="submit()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
+
+<script>
+    layui.use(['layer','laydate', 'form'], function(){
+    });
+    //添加
+    function submit(){
+        var jsonObj = {"roomId":$('#roomId').val(),"id":$('#id').val(),"energyType":$('#energyType').val(),"mount":$('#mount').val(),"payMoney":$('#payMoney').val()};
+        $.ajax({
+            type: 'POST',
+            url: "/suguan/energyList/edit",
+            dataType: "json",
+            data:jsonObj,
+            success: function(data) {
+                layer.msg(data.message,{icon:1})
+                setTimeout(function(){ parent.location.reload();},1000);
+            },
+            error: function() {
+                layer.msg("操作失败")
+            }
+        });
+    }
+</script>
+</body>
+</html>

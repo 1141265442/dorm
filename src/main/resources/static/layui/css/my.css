@@ -1,0 +1,19 @@
+/*.layui-side{position:fixed;left:0;top:86px!important;bottom:0;z-index:999;width:200px;overflow-x:hidden;background-color:#393d49}*/
+/*.header{top:80px!important;}*/
+/*.header{position: fixed;top:10.6%!important;left: 200px;width:100%}*/
+/*.content{position: fixed;top:100px!important;left: 14%;}*/
+.layui-side{
+    position:absolute;
+    left:0;
+    height: 100%;
+    top:60px!important;bottom:0;z-index:999;width:200px;overflow-x:hidden;background-color:#393d49}
+
+#content {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 100px;
+    left: 210px;
+    bottom: 0px;
+    z-index: 0;
+    overflow:hidden; word-break:break-all; }

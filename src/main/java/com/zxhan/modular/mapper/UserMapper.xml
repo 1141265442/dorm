@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zxhan.modular.mapper.UserMapper">
+
+    <select id="selectStudent" resultType="map">
+        select user.*,dept.name dormName,d1.name buildingName  from user
+            left join dept on user.deptid=dept.id
+            left join dept d1 on d1.id=dept.pids
+            where roleid=1
+            <if test="name != null">
+                and user.name like CONCAT('%',#{name},'%')
+            </if>
+
+    </select>
+</mapper>

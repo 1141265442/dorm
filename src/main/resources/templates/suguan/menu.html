@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+<div style="width: 83%">
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    </script>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 600
+            ,url: '/menu' //数据接口
+            ,page: true //开启分页
+            ,cols: [
+                [ //表头
+                {field: 'id', title: 'ID',  sort: true, fixed: 'left'}
+                ,{field: 'name', title: '菜单名称'}
+                ,{field: 'code', title: '菜单编号',  sort: true}
+                ,{field: 'tips', title: '菜单说明'}
+                ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
+            ]
+            ]
+        });
+
+        //监听行工具事件
+        //跳转到修改页面
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            if(layEvent === 'edit'){
+                layer.open({
+                    type: 2,
+                    title:"修改学生信息",
+                    content: '/suguan/menu/edit?id='+obj.data.id, //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    area:['700px','300px']
+                });
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

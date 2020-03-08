@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+    <div class="layui-container" style="position: absolute;top: 10%;">
+        <div class="layui-row">
+            <form class="layui-form">
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">访问寝室号</label>
+                    <div class="layui-input-inline">
+                        <select name="roomId" id="roomId" class="layui-option">
+                    <option th:each="map:${depts}" th:value="${map.id}" th:text="${map.name}"></option>
+                </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">来访人姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="visitorName" name="visitorName" required lay-verify="required" placeholder="来访人姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">访问原因</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="reason" name="reason" required lay-verify="required" placeholder="访问原因" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">访问时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="visitTime" name="visitTime" placeholder="yyyy-MM-dd HH:mm:ss">
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" onclick="submit()">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/layui/layui.js}"></script>
+    <script th:src="@{/js/jquery-1.9.0.min.js}"></script>
+
+<script>
+    layui.use(['layer','laydate', 'form'], function(){
+//        var layer = layui.layer;
+        var laydate = layui.laydate;
+        //日期时间选择器
+        laydate.render({
+            elem: '#visitTime'
+            ,trigger: 'click'
+            ,type: 'datetime'
+        });
+    });
+    //添加
+    function submit(){
+        var jsonObj = {"visitorName":$('#visitorName').val(),"roomId":$('#roomId').val(),
+                        "reason":$('#reason').val(),"visitTime":$('#visitTime').val()}
+                        console.log(JSON.stringify(jsonObj))
+        $.ajax({
+            type: 'POST',
+            url: "/suguan/visitorList/add",
+            dataType: "json",
+            data:jsonObj,
+            success: function(data) {
+                layer.msg(data.message,{icon:1})
+                setTimeout(function(){ parent.location.reload();},1000);
+            },
+            error: function() {
+                layer.msg("操作失败")
+            }
+        });
+    }
+</script>
+</body>
+</html>

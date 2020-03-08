@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}" type="text/css" >
+</head>
+<body>
+
+<div style="width: 83%">
+    <div class="layui-form-item layui-form">
+        <div class="layui-inline">
+            <select name="user" id="type" class="layui-option">
+                <option value="">选择能源类型</option>
+                <option value="水费" >水</option>
+        <option value="电费" >电</option>
+                <option value="燃气费" >气</option>
+            </select>
+        </div>
+        <div class="layui-inline">
+            <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon"></i>搜索</button>
+            <button id="btnAdd" class="layui-btn icon-btn" onclick="add()"><i class="layui-icon"></i>录入</button>
+        </div>
+    </div>
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">修改</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
+<script th:src="@{/layui/layui.js}"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 600
+            ,url: '/energy' //数据接口
+            ,page: true //开启分页
+            ,cols: [
+                [ //表头
+                {field: 'id', title: 'ID',  sort: true, fixed: 'left'}
+                ,{field: 'roomId', title: '寝室号',  sort: true}
+                ,{field: 'energyType', title: '能源类型'}
+                ,{field: 'mount', title: '用量'}
+                ,{field: 'pay', title: '是否缴费',  sort: true}
+                ,{field: 'payMoney', title: '缴费金额',  sort: true}
+                ,{fixed: 'right', width: 200, align:'center', toolbar: '#barDemo'}
+            ]
+            ]
+        });
+
+        //删除、跳转到修改页面
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var layEvent = obj.event; //获得 lay-event 对应的值
+            if(layEvent === 'del'){//删除
+                layer.confirm('真的删除行么', function(){
+                    $.ajax({
+                        type: 'POST',
+                        url: "/suguan/energyList/del",
+                        dataType: "json",
+                        data:{"id":obj.data.id},
+                        success: function(data) {
+                            layer.msg(data.message,{icon:1})
+                            setTimeout(function(){ window.location.reload();},1000);
+                        },
+                        error: function() {
+                            layer.msg("操作失败")
+                        }
+                    });
+                });
+            } else if(layEvent === 'edit'){
+                layer.open({
+                    type: 2,
+                    title:"修改宿舍楼",
+                    content: '/suguan/energy/edit?id='+obj.data.id, //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                    area:['700px','300px']
+                });
+            }
+        });
+
+        //查找
+        var $ = layui.$, active = {
+            reload:function(){
+                table.reload('demo',
+                    {page:
+                        {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: { type: $("#type").val()}//这里传参  向后台
+                        , url: '/energy'//后台做模糊搜索接口路径
+                        , method: 'post'
+                    });
+            }
+        };
+        $('#btnSearch').on('click', function(){
+            var type = 'reload';
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+    //跳转到添加页面
+    function add() {
+        layer.open({
+            type: 2,
+            title:"添加收费记录",
+            content: '/suguan/energy/add', //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+            area:['700px','300px']
+        });
+    }
+</script>
+</body>
+</html>
